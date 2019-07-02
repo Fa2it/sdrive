@@ -33,7 +33,7 @@ class PhotoService{
 			$response = $client->request('GET', $url);
 			if( $response->getStatusCode() == 200 ){			
 				$apiPhotos =  json_decode( $response->getBody()->getContents(), true);
-				$pr = $this->compareApiUserPhotos( $apiPhotos, $user_id );
+				$pr = $this->compareApiUserPhotos( $apiPhotos, $user_id, $start );
 			}
 
 			return $pr;
@@ -43,14 +43,14 @@ class PhotoService{
 	/*
 	 * Helper function for getAll
 	 */
-	private function compareApiUserPhotos(array $apiPhotos, int $user_id )
+	private function compareApiUserPhotos(array $apiPhotos, int $user_id , int $start)
 	{
-		$userPhotos = $this->getUserAll( $user_id );
+		$userPhotos = $this->getUserAll( $user_id, $start );
 
 		if( $userPhotos->count() ){
-			foreach ( $userPhotos as $userPhoto) {
-					foreach ( $apiPhotos as $key=>$apiPhoto) {
-							$apiPhoto['favorite'] = 'Like';
+			foreach ( $apiPhotos as $key=>$apiPhoto) {
+						$apiPhoto['favorite'] = 'Like';
+						foreach ( $userPhotos as $userPhoto) {		
 						if( $userPhoto->photo_id == $apiPhoto['id'] ){
 							$apiPhoto['favorite'] = 'UnLike';
 						}
@@ -77,9 +77,11 @@ class PhotoService{
 	 * Helper function for compareApiUserPhotos
 	 */
 
-	private function getUserAll(int $user_id){
+	private function getUserAll(int $user_id, int $start){
 		// get user photos or Favorites from database
+		$end = ( $start + 20 );
 		return Photo::where('user_id', $user_id )
+			   ->whereBetween('photo_id', [$start, $end ])
            	   ->get();
 
 	}
