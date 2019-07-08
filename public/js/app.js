@@ -1782,8 +1782,16 @@ __webpack_require__.r(__webpack_exports__);
         this.unlike(item, key);
       }
     },
+    setFavoriteCls: function setFavoriteCls(item) {
+      return {
+        'btn-secondary': item.btnSecondary,
+        'btn-primary': item.btnPrimary
+      };
+    },
     like: function like(item, key) {
       this.gallery[key].favorite = "UnLike";
+      this.gallery[key].btnPrimary = true;
+      this.gallery[key].btnSecondary = false;
       var url = 'api/photo/create';
       var postData = {
         user_id: this.uuid,
@@ -1802,6 +1810,8 @@ __webpack_require__.r(__webpack_exports__);
     },
     unlike: function unlike(item, key) {
       this.gallery[key].favorite = "Like";
+      this.gallery[key].btnPrimary = false;
+      this.gallery[key].btnSecondary = true;
       var url = 'api/photo/delete/' + item.id;
       axios["delete"](url, {
         headers: {
@@ -1821,6 +1831,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       }).then(function (response) {
         if (response.data.Photos !== undefined) {
+          console.log(response.data.Photos);
           _this.gallery = response.data.Photos;
           _this.isPagination = true;
         }
@@ -37949,7 +37960,8 @@ var render = function() {
           _c(
             "button",
             {
-              staticClass: "btn btn-secondary btn-sm",
+              staticClass: "btn btn-sm",
+              class: _vm.setFavoriteCls(item),
               attrs: { id: "2" },
               on: {
                 click: function($event) {
@@ -50634,8 +50646,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\Development\Laravel\Project\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\Development\Laravel\Project\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Testing\sdrive\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Testing\sdrive\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

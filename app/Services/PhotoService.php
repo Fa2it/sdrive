@@ -50,9 +50,13 @@ class PhotoService{
 		if( $userPhotos->count() ){
 			foreach ( $apiPhotos as $key=>$apiPhoto) {
 						$apiPhoto['favorite'] = 'Like';
+						$apiPhoto['btnPrimary'] = false;
+						$apiPhoto['btnSecondary'] = true;
 						foreach ( $userPhotos as $userPhoto) {		
 						if( $userPhoto->photo_id == $apiPhoto['id'] ){
 							$apiPhoto['favorite'] = 'UnLike';
+							$apiPhoto['btnPrimary'] = true;
+							$apiPhoto['btnSecondary'] = false;
 						}
 						$apiPhotos[$key] = $apiPhoto;
 					}
@@ -61,6 +65,8 @@ class PhotoService{
 			// user doesn't have footos map all as Like
 			foreach ( $apiPhotos as $key=>$apiPhoto) {
 				$apiPhoto['favorite'] = 'Like';
+				$apiPhoto['btnPrimary'] = false;
+				$apiPhoto['btnSecondary'] = true;				
 				$apiPhotos[$key] = $apiPhoto;
 			}			
 		}

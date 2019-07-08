@@ -367,8 +367,11 @@ class PhotoTest extends TestCase
         // the 6th Item of the Photos array
         $this->assertEquals(6, $p['Photos'][5]['id']);
         $this->assertEquals('UnLike', $p['Photos'][5]['favorite']);
+		$this->assertEquals(true, $p['Photos'][5]['btnPrimary']);
+		$this->assertEquals(false, $p['Photos'][5]['btnSecondary']);
         $this->assertEquals('Like', $p['Photos'][6]['favorite']);
-         
+        $this->assertEquals(false, $p['Photos'][6]['btnPrimary']);
+        $this->assertEquals(true, $p['Photos'][6]['btnSecondary']);
 
     }
 

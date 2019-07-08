@@ -5,7 +5,7 @@
                 <img :src="item.thumbnailUrl" class="rounded" >
                  <div class="d-block">{{ item.title | subStr }}</div>
                  <button id="2" v-on:click="setFavorite(item, key )" 
-                        class="btn btn-secondary btn-sm">{{item.favorite}}</button>
+                        class="btn btn-sm" v-bind:class="setFavoriteCls(item)">{{item.favorite}}</button>
                  <span class="ml-2 font-weight-bold">#{{item.id}}</span>
             </div>                    
         </div>
@@ -52,11 +52,16 @@
                     this.like(item, key );
                 } else {
                     this.unlike(item, key);
-                }
-              
+                }   
             },
+			setFavoriteCls( item ){
+				return { 'btn-secondary': item.btnSecondary, 'btn-primary': item.btnPrimary };
+			},
             like(item, key){
-                this.gallery[key].favorite = "UnLike"; 
+                this.gallery[key].favorite = "UnLike";
+				this.gallery[key].btnPrimary = true;
+				this.gallery[key].btnSecondary = false;
+				
                 let url = 'api/photo/create';
                 let postData = {
                         user_id : this.uuid, 
@@ -80,6 +85,8 @@
             },
             unlike(item, key){
                 this.gallery[key].favorite = "Like"; 
+				this.gallery[key].btnPrimary = false;
+				this.gallery[key].btnSecondary = true;
                 let url = 'api/photo/delete/' + item.id;
                 axios.delete(url, { headers: { Authorization: this.AuthStr } })
                 .then((response) => {              
@@ -96,6 +103,7 @@
                 axios.get(url, { headers: { Authorization: this.AuthStr } })
                 .then((response) => {
                 if( response.data.Photos !== undefined){
+				console.log( response.data.Photos );
                     this.gallery = response.data.Photos;
                     this.isPagination = true;
                 }               
